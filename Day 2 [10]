@@ -1,0 +1,17 @@
+import java.util.Scanner;
+class PlayfairCipherKeys {
+    public static void main(String[] args) {
+        int numKeys = 0;
+        Scanner read = new Scanner(System.in);
+        String alphabet = read.nextLine();
+        for (int i = 0; i < alphabet.length(); i++) {
+            for (int j = 0; j < alphabet.length(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                numKeys++;
+            }
+        }
+        System.out.println("The Playfair cipher has approximately " + Math.pow(2, numKeys) + " possible keys.");
+    }
+}
