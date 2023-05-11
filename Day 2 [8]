@@ -1,0 +1,78 @@
+import java.util.Scanner;
+
+public class MonoalphabeticCipher {
+    public static void main(String[] args) {
+        String keyword = "CIPHER";
+        String cipher = generateCipherSequence(keyword);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter plaintext: ");
+        String plaintext = scanner.nextLine();
+
+        String ciphertext = encrypt(plaintext, cipher);
+        System.out.println("Ciphertext: " + ciphertext);
+
+        String decrypted = decrypt(ciphertext, cipher);
+        System.out.println("Decrypted plaintext: " + decrypted);
+
+        scanner.close();
+    }
+
+    private static String generateCipherSequence(String keyword) {
+        StringBuilder cipherSequence = new StringBuilder();
+        boolean[] isUsed = new boolean[26];
+
+        // Append keyword letters to cipher sequence
+        for (char c : keyword.toCharArray()) {
+            int index = Character.toUpperCase(c) - 'A';
+            if (!isUsed[index]) {
+                cipherSequence.append(c);
+                isUsed[index] = true;
+            }
+        }
+
+        // Append unused letters in normal order to cipher sequence
+        for (char c = 'A'; c <= 'Z'; c++) {
+            int index = c - 'A';
+            if (!isUsed[index]) {
+                cipherSequence.append(c);
+                isUsed[index] = true;
+            }
+        }
+
+        return cipherSequence.toString();
+    }
+
+    private static String encrypt(String plaintext, String cipher) {
+        StringBuilder ciphertext = new StringBuilder();
+
+        for (char c : plaintext.toCharArray()) {
+            if (Character.isLetter(c)) {
+                int index = Character.toUpperCase(c) - 'A';
+                char substitution = cipher.charAt(index);
+                ciphertext.append(Character.isLowerCase(c) ? Character.toLowerCase(substitution) : substitution);
+            } else {
+                ciphertext.append(c);
+            }
+        }
+
+        return ciphertext.toString();
+    }
+
+    private static String decrypt(String ciphertext, String cipher) {
+        StringBuilder plaintext = new StringBuilder();
+
+        for (char c : ciphertext.toCharArray()) {
+            if (Character.isLetter(c)) {
+                int index = cipher.indexOf(Character.toUpperCase(c));
+                char substitution = (index >= 0) ? (char) ('A' + index) : c;
+                plaintext.append(Character.isLowerCase(c) ? Character.toLowerCase(substitution) : substitution);
+            } else {
+                plaintext.append(c);
+            }
+        }
+
+        return plaintext.toString();
+    }
+}
